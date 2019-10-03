@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+  flask:
+    image: python:3.7
+    volumes:
+      - ./flask:/flask
+    working_dir: /flask
+    ports:
+      - 5000:5000
+    command:
+      - bash -c "pip install flask pugsql pymysql && python /flask/app.py"
