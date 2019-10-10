@@ -6,6 +6,12 @@
 
 ---
 
+### Components
+
+- [ ] Raspberry PI 3 B+
+- [ ] Lettore RFID
+- [ ] Monitor + Cavo HDMI
+
 #### Requirements:
 
 - Dokcer + docker-compose
