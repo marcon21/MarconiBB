@@ -1,4 +1,4 @@
-from flask import Flask, escape, request, redirect, send_from_directory
+from flask import Flask, escape, request, redirect, send_from_directory, render_template
 import pugsql
 
 app = Flask(__name__)
@@ -27,11 +27,12 @@ def send_image(path):
 @app.route('/home')
 def home():
     page = {
-        title: "Home"
+        'title': "Home"
     }
     return render_template('home.html', page=page)
 
 
+@app.route('/')
 def root():
     return redirect("/home")
 
