@@ -1,4 +1,4 @@
-from flask import Flask, escape, request, redirect, send_from_directory, render_template
+from flask import Flask, request, redirect, send_from_directory, render_template, g
 import pugsql
 
 app = Flask(__name__)
@@ -24,10 +24,31 @@ def send_image(path):
     return send_from_directory('images', path)
 
 
+@app.route('/add_user/<path:path>')
+def add_user(path):
+    print(g.get('users'))
+
+    # if 'users' in g:
+    #     g.users.append({'name': path})
+
+    return redirect('/home')
+
+
 @app.route('/home')
 def home():
+    if not 'users' in g:
+        g.users = [{
+            'name': 'daniel marcon'
+        }, {
+            'name': 'giacomo tezza'
+        }, {
+            'name': 'enea strambini'
+        }]
+    print(g.get('users'))
+
     page = {
-        'title': "Home"
+        'title': "Pronatozione Aula",
+        'users': g.users
     }
     return render_template('home.html', page=page)
 
