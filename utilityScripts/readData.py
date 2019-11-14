@@ -5,6 +5,8 @@ from digitalio import DigitalInOut
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
 from adafruit_pn532.i2c import PN532_I2C
 
+BLOCK_N = 64 # The number of blocks in a badge
+
 # The key used to acces the card
 key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
 
@@ -28,14 +30,19 @@ while True:
 print("")
 print('Found card with UID:', [hex(i) for i in uid])
 
-for i in range(64):
+# Begin the reading process
+for i in range(BLOCK_N):
+    print("Mantenere il badge vicino al lettore")
+    
+    # Authentication process 
     authenticated = pn532.mifare_classic_authenticate_block(uid, i, MIFARE_CMD_AUTH_B, key)
     if not authenticated:
         print("Authentication failed!")
 
     print('Reading block number ', i)
 
-    try:
-        print([hex(x) for x in pn532.mifare_classic_read_block(i)])
-    except:
-        print("Errore")
+    data = bytearray(16)
+    data = hex(x) for x in pn532.mifare_classic_read_block(i)]
+    dataDictionary = {i : data}
+
+print("Lettura Terminata, ecco i valori: ", dataDictionary)
