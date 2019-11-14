@@ -38,7 +38,8 @@ if not authenticated:
 
 # Hashing the username for maximum security
 hashedUser = bytearray(16)
-hashedUser = md5(user.encode('utf-8')).hexdigest
+hashedUser = md5(user.encode('utf-8')).digest()
+
 
 pn532.mifare_classic_write_block(4, hashedUser)
 print('Wrote to block 4, now trying to read that data:',
