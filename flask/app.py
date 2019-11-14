@@ -1,7 +1,10 @@
-from flask import Flask, request, redirect, send_from_directory, render_template, g
+from flask import Flask, request, redirect, send_from_directory, render_template, g, session
 import pugsql
 
 app = Flask(__name__)
+
+# crypt key fot the session
+app.secret_key = 'hdsadòsadhcisoia69420'
 
 
 @app.errorhandler(404)
@@ -24,31 +27,24 @@ def send_image(path):
     return send_from_directory('images', path)
 
 
-@app.route('/add_user/<path:path>')
-def add_user(path):
-    print(g.get('users'))
-
-    # if 'users' in g:
-    #     g.users.append({'name': path})
-
+# take the string after /add_user/ and append it as username in the session
+@app.route('/add_user/<string:name>')
+def add_user(name):
+    if 'users' in session:
+        session['users'].append({'name':name})
+        session.modified = True
     return redirect('/home')
 
 
 @app.route('/home')
 def home():
-    if not 'users' in g:
-        g.users = [{
-            'name': 'daniel marcon'
-        }, {
-            'name': 'giacomo tezza'
-        }, {
-            'name': 'enea strambini'
-        }]
-    print(g.get('users'))
+    #session.clear()
+    if not 'users' in session:
+        session['users'] = []
 
     page = {
         'title': "Pronatozione Aula",
-        'users': g.users
+        'users': session['users']
     }
     return render_template('home.html', page=page)
 
@@ -59,4 +55,4 @@ def root():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
