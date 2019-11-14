@@ -17,7 +17,9 @@
 </head>
 
 <body>
-    <div id="content">{% block page_content %}{% endblock page_content %}</div>
+    <head>{% block page_head %}{% endblock page_head %}</head>
+    <main><div id="content">{% block page_content %}{% endblock page_content %}</div></main>
+    <footer>{% block page_footer %}{% endblock page_footer %}</footer>
 </body>
 
 </html>

@@ -31,14 +31,21 @@ def send_image(path):
 @app.route('/add_user/<string:name>')
 def add_user(name):
     if 'users' in session:
-        session['users'].append({'name':name})
-        session.modified = True
+        if {'name':name} not in session['users']:
+            session['users'].append({'name':name})
+            session.modified = True
+    return redirect('/home')
+
+
+# clear the session
+@app.route('/clear')
+def clear():
+    session.clear()
     return redirect('/home')
 
 
 @app.route('/home')
 def home():
-    #session.clear()
     if not 'users' in session:
         session['users'] = []
 
