@@ -29,4 +29,13 @@ print("")
 print('Found card with UID:', [hex(i) for i in uid])
 
 for i in range(64):
-    print('Block number' + i + [hex(x) for x in pn532.mifare_classic_read_block(i)])
+    authenticated = pn532.mifare_classic_authenticate_block(uid, i, MIFARE_CMD_AUTH_B, key)
+    if not authenticated:
+        print("Authentication failed!")
+
+    print('Reading block number ', i)
+
+    try:
+        print([hex(x) for x in pn532.mifare_classic_read_block(i)])
+    except:
+        print("Errore")
