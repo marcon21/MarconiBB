@@ -30,11 +30,12 @@ while True:
 print("")
 print('Found card with UID:', [hex(i) for i in uid])
 
+dataDictionary = {}
+
 # Begin the reading process
+print("Mantenere il badge vicino al lettore")
 for i in range(BLOCK_N):
-    print("Mantenere il badge vicino al lettore")
-    
-    # Authentication process 
+    # Authentication process
     authenticated = pn532.mifare_classic_authenticate_block(uid, i, MIFARE_CMD_AUTH_B, key)
     if not authenticated:
         print("Authentication failed!")
@@ -42,7 +43,9 @@ for i in range(BLOCK_N):
     print('Reading block number ', i)
 
     data = bytearray(16)
-    data = hex(x) for x in pn532.mifare_classic_read_block(i)]
-    dataDictionary = {i : data}
+    data = ([hex(x) for x in pn532.mifare_classic_read_block(i)])
+    dataDictionary[i] = data
 
-print("Lettura Terminata, ecco i valori: ", dataDictionary)
+print("Lettura Terminata, ecco i valori: ")
+for i in dataDictionary:
+    print("Blocco numero: ", i, dataDictionary[i])
