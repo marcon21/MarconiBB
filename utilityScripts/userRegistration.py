@@ -4,12 +4,20 @@ from hashlib import md5
 from digitalio import DigitalInOut
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
 from adafruit_pn532.i2c import PN532_I2C
+import mysql.connector
+
+BLOCK = 4 # The block onto wich write the userID
 
 # The key used to acces the card
 key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
 
-# The username that identify the owner of the card
-user = input("Inserisci il nome dell'utente: ")
+
+# The userID that identify the owner of the badge
+userID = input("Inserisci il lo userID: ")
+
+# Name and Surname of the owner of the badge
+userName = input("Inserisci il nome dell'utente: ")
+userSurname = input("Inserisci il cognome dell'utente: ")
 
 # Creating the NFCReader object
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -38,9 +46,25 @@ if not authenticated:
 
 # Hashing the username for maximum security
 hashedUser = bytearray(16)
-hashedUser = md5(user.encode('utf-8')).digest()
+hashedUser = md5(userID.encode('utf-8')).digest()
 
-
+# Writing the hashed userID onto the badge
 pn532.mifare_classic_write_block(4, hashedUser)
 print('Wrote to block 4, now trying to read that data:',
       [hex(x) for x in pn532.mifare_classic_read_block(4)])
+
+# Saving data onto the database
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="test",
+  passwd="test",
+  database="TestBadge"
+)
+cursor = mydb.cursor()
+sql = "INSERT INTO Utenti VALUES (%s, %s, %s)"
+values = (md5(userID.encode('utf-8')).hexdigest(), userName, userSurname)
+try:
+    cursor.execute()
+except:
+    print("Errore durante la scrittura sul database, controllare i dati e riprovare")
