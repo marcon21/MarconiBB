@@ -6,7 +6,7 @@ from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
 from adafruit_pn532.i2c import PN532_I2C
 
 BLOCK_N = 4 # The number of the block to read
-
+userID = ""
 # The key used to acces the card
 key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
 
@@ -33,4 +33,8 @@ if authenticated:
     data = bytearray(16)
     data = ([hex(x) for x in pn532.mifare_classic_read_block(BLOCK_N)])
 
-print(data)
+# Decoding the userID
+for element in data:
+    userID += element[2:]
+
+
