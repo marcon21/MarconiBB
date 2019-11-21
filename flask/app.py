@@ -1,10 +1,11 @@
 from flask import Flask, request, redirect, send_from_directory, render_template, g, session
 import pugsql
+import asyncio
+import websocket
 
 app = Flask(__name__)
-
 # crypt key fot the session
-app.secret_key = 'hdsadòsadhcisoia69420'
+app.secret_key = 'tatsuatshisadlmaòcisoia69420'
 
 
 @app.errorhandler(404)
@@ -31,9 +32,11 @@ def send_image(path):
 @app.route('/add_user/<string:name>')
 def add_user(name):
     if 'users' in session:
-        if {'name':name} not in session['users']:
-            session['users'].append({'name':name})
+        if {'name': name} not in session['users']:
+            session['users'].append({'name': name})
             session.modified = True
+
+    ws.send("refresh")
     return redirect('/home')
 
 
@@ -51,7 +54,8 @@ def home():
 
     page = {
         'title': "Pronatozione Aula",
-        'users': session['users']
+        'users': session['users'],
+        'buttons': []
     }
     return render_template('home.html', page=page)
 
@@ -62,4 +66,7 @@ def root():
 
 
 if __name__ == "__main__":
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("ws://localhost/")
+
     app.run(host='127.0.0.1', port=5000, debug=True)

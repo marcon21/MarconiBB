@@ -17,8 +17,14 @@
 </head>
 
 <body>
+
     <head>{% block page_head %}{% endblock page_head %}</head>
-    <main><div id="content">{% block page_content %}{% endblock page_content %}</div></main>
+    <main>
+        <div id="content">{% block page_content %}{% endblock page_content %}</div>
+    </main>
+    {% for button in page.buttons %}
+    <button>button.name</button>
+    {% endfor %}
     <footer>{% block page_footer %}{% endblock page_footer %}</footer>
 </body>
 
