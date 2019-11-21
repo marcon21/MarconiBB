@@ -1,11 +1,12 @@
 from flask import Flask, request, redirect, send_from_directory, render_template, g, session
 import pugsql
-import asyncio
-import websocket
+from flask_socketio import SocketIO, emit
+
 
 app = Flask(__name__)
 # crypt key fot the session
 app.secret_key = 'tatsuatshisadlmaòcisoia69420'
+socketio = SocketIO(app)
 
 
 @app.errorhandler(404)
@@ -36,7 +37,7 @@ def add_user(name):
             session['users'].append({'name': name})
             session.modified = True
 
-    ws.send("refresh")
+    refresh()
     return redirect('/home')
 
 
@@ -44,6 +45,7 @@ def add_user(name):
 @app.route('/clear')
 def clear():
     session.clear()
+    refresh()
     return redirect('/home')
 
 
@@ -65,8 +67,9 @@ def root():
     return redirect("/home")
 
 
-if __name__ == "__main__":
-    websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost/")
+def refresh():
+    socketio.send("Refresh")
 
-    app.run(host='127.0.0.1', port=5000, debug=True)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=True)
