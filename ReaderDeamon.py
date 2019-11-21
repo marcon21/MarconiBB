@@ -7,7 +7,7 @@ from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
 from adafruit_pn532.i2c import PN532_I2C
 
 BLOCK_N = 4 # The number of the block to read
-userID = ""
+hashedID = ""
 # The key used to acces the card
 key = b'\xFF\xFF\xFF\xFF\xFF\xFF'
 
@@ -36,7 +36,7 @@ if authenticated:
 
 # Decoding the userID
 for element in data:
-    userID += element[2:]
+    hashedID += element[2:]
 
 # Query to the database
 
@@ -47,3 +47,9 @@ mydb = mysql.connector.connect(
   database="TestBadge"
 )
 cursor = mydb.cursor()
+
+sql = "SELECT userID, userName, userSurname, userRole FROM Utenti WHERE hashedID = %s"
+cursor.execute(sql, hashedID)
+
+result = cursor.fetchall
+print(result)
