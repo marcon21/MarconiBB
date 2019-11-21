@@ -1,5 +1,6 @@
 import board
 import busio
+import mysql.connector
 from hashlib import md5
 from digitalio import DigitalInOut
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
@@ -37,4 +38,12 @@ if authenticated:
 for element in data:
     userID += element[2:]
 
+# Query to the database
 
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="test",
+  passwd="test",
+  database="TestBadge"
+)
+cursor = mydb.cursor()
