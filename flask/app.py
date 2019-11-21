@@ -57,7 +57,15 @@ def home():
     page = {
         'title': "Pronatozione Aula",
         'users': session['users'],
-        'buttons': []
+        'buttons': [{
+            "name": "Annulla",
+            "color": "red",
+            "href": "/clear"
+        }, {
+            "name": "Avanti",
+            "color": "blue",
+            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }]
     }
     return render_template('home.html', page=page)
 
