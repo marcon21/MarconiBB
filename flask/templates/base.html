@@ -17,7 +17,23 @@
 </head>
 
 <body>
-    <div id="content">{% block page_content %}{% endblock page_content %}</div>
+
+    <head>{% block page_head %}{% endblock page_head %}</head>
+    <main>
+        <div id="content">{% block page_content %}{% endblock page_content %}</div>
+    </main>
+
+
+
+    <div class="center" style="position: fixed; bottom: 0; width: 100%; margin: 20px">
+        {% for button in page.buttons %}
+        <a class="waves-effect waves-light btn-large {{ button.color }}" href={{ button.href }}>{{ button.name }}</a>
+        {% endfor %}
+    </div>
+
+
+
+    <footer>{% block page_footer %}{% endblock page_footer %}</footer>
 </body>
 
 </html>

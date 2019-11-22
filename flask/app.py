@@ -1,7 +1,12 @@
-from flask import Flask, request, redirect, send_from_directory, render_template, g
+from flask import Flask, request, redirect, send_from_directory, render_template, g, session
 import pugsql
+from flask_socketio import SocketIO, emit
+
 
 app = Flask(__name__)
+# crypt key fot the session
+app.secret_key = 'tatsuatshisadlmaòcisoia69420'
+socketio = SocketIO(app)
 
 
 @app.errorhandler(404)
@@ -24,31 +29,43 @@ def send_image(path):
     return send_from_directory('images', path)
 
 
-@app.route('/add_user/<path:path>')
-def add_user(path):
-    print(g.get('users'))
+# take the string after /add_user/ and append it as username in the session
+@app.route('/add_user/<string:name>')
+def add_user(name):
+    if 'users' in session:
+        if {'name': name} not in session['users']:
+            session['users'].append({'name': name})
+            session.modified = True
 
-    # if 'users' in g:
-    #     g.users.append({'name': path})
+    refresh()
+    return redirect('/home')
 
+
+# clear the session
+@app.route('/clear')
+def clear():
+    session.clear()
+    refresh()
     return redirect('/home')
 
 
 @app.route('/home')
 def home():
-    if not 'users' in g:
-        g.users = [{
-            'name': 'daniel marcon'
-        }, {
-            'name': 'giacomo tezza'
-        }, {
-            'name': 'enea strambini'
-        }]
-    print(g.get('users'))
+    if not 'users' in session:
+        session['users'] = []
 
     page = {
         'title': "Pronatozione Aula",
-        'users': g.users
+        'users': session['users'],
+        'buttons': [{
+            "name": "Annulla",
+            "color": "red",
+            "href": "/clear"
+        }, {
+            "name": "Avanti",
+            "color": "blue",
+            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }]
     }
     return render_template('home.html', page=page)
 
@@ -56,6 +73,10 @@ def home():
 @app.route('/')
 def root():
     return redirect("/home")
+
+
+def refresh():
+    socketio.send("Refresh")
 
 
 if __name__ == "__main__":

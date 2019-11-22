@@ -1,0 +1,5 @@
+flask
+pugsql
+pymysql
+websocket-client
+flask-socketio
