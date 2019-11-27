@@ -27,7 +27,8 @@
 
     <div class="center" style="position: fixed; bottom: 0; width: 100%; margin: 20px">
         {% for button in page.buttons %}
-        <a class="waves-effect waves-light btn-large {{ button.color }}" href={{ button.href }}>{{ button.name }}</a>
+        <a class="waves-effect waves-light btn-large {{ button.color }}" href={{ button.href }}
+            onclick={{ button.action }}>{{ button.name }}</a>
         {% endfor %}
     </div>
 
