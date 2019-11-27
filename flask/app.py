@@ -1,7 +1,8 @@
 from flask import Flask, request, redirect, send_from_directory, render_template, g, session
 import pugsql
 from flask_socketio import SocketIO, emit
-
+import string
+import random
 
 app = Flask(__name__)
 # crypt key fot the session
@@ -37,7 +38,7 @@ def add_user(name):
             session['users'].append({'name': name})
             session.modified = True
 
-    refresh()
+    refresh_the_client()
     return redirect('/home')
 
 
@@ -45,7 +46,7 @@ def add_user(name):
 @app.route('/clear')
 def clear():
     session.clear()
-    refresh()
+    refresh_the_client()
     return redirect('/home')
 
 
@@ -53,6 +54,8 @@ def clear():
 def home():
     if not 'users' in session:
         session['users'] = []
+
+    new_user = ''.join(random.choices(string.ascii_lowercase, k=10))
 
     page = {
         'title': "Pronatozione Aula",
@@ -62,11 +65,16 @@ def home():
             "color": "red",
             "href": "/clear"
         }, {
+            "name": "Aggiungi Utente",
+            "color": "green",
+            "href": "http://localhost:5000/add_user/{}".format(new_user)
+        }, {
             "name": "Avanti",
             "color": "blue",
             "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
         }]
     }
+
     return render_template('home.html', page=page)
 
 
@@ -75,7 +83,7 @@ def root():
     return redirect("/home")
 
 
-def refresh():
+def refresh_the_client():
     socketio.send("Refresh")
 
 
