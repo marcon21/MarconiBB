@@ -29,9 +29,10 @@ ic, ver, rev, support = pn532.get_firmware_version()
 print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
 
 pn532.SAM_configuration()
-print('Waiting for RFID/NFC card to write to!')
 
 while True:
+    hashedID = ""
+    print("Waiting for RFID/NFC card!")
     while True:
         # Check if a card is available to read
         uid = pn532.read_passive_target(timeout=0.5)
@@ -51,8 +52,6 @@ while True:
         hashedID += element[2:]
 
     # Query to the database
-
-
 
     sql = "SELECT userID, userName, userSurname, userRole FROM Utenti WHERE hashedID = %s"
     val = (hashedID,)
