@@ -19,8 +19,8 @@
     <div class='col s3 m3 l3'></div>
     <div class="col s6 m6 l6">
         <ul class='collection'>
-            {%for day in page.days %}
-            <li class='collection-item avatar user-content {{ day.active_status }}'>
+            {% for day in page.days %}
+            <li id="{{ loop.index }}" class='collection-item avatar user-content'>
                 <i class="large material-icons circle amber darken-1">account_circle</i>
                 <span class="title">{{ day.name }}</span>
                 <span class="title">{{ day.day }}</span>
@@ -31,9 +31,31 @@
     </div>
 </div>
 
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
+    var day = 1;
+    var n = document.getElementsByTagName("li").length + 1;
+
+    changeActiveStatus();
+
+    socket.on('next', function (data) {
+        day = day % n + 1;
+        changeActiveStatus();
+    });
+
+    function changeActiveStatus() {
+        // console.log(document.getElementById(String(1)))
+        for (let i = 1; i < n; i++) {
+            if (i == day) {
+                document.getElementById(String(i)).classList.add('active');
+            } else {
+                document.getElementById(String(i)).classList.remove('active');
+            }
+        }
+    }
 </script>
-
 
 {% endblock page_content %}

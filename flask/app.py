@@ -3,6 +3,8 @@ import pugsql
 from flask_socketio import SocketIO
 import string
 import random
+import datetime as dt
+
 
 app = Flask(__name__)
 # crypt key fot the session
@@ -44,13 +46,41 @@ def send_image(path):
 # take the string after /add_user/ and append it as username in the session
 @app.route('/add_user/<string:name>')
 def add_user(name):
+
+    data = {
+        'userName': ''.join(random.choices(string.ascii_lowercase, k=5)),
+        'userSurname': ''.join(random.choices(string.ascii_lowercase, k=5)),
+        'userID': ''.join(random.choices(string.ascii_lowercase + string.digits, k=5)),
+        'userRole': random.choice(['Studente', 'Professore'])
+    }
+
     if 'users' in session:
-        if {'name': name} not in session['users']:
-            session['users'].append({'name': name})
+        if data not in session['users']:
+            session['users'].append(data)
             session.modified = True
 
     refresh_the_client()
     return redirect('/home')
+
+
+@app.route('/post_user', methods=['POST'])
+def post_user():
+    if request.method == 'POST':
+        data = request.get_json()
+        if 'users' in session:
+            if data not in session['users']:
+                session['users'].append(data)
+                session.modified = True
+        refresh_the_client()
+
+    if request.method == 'GET':
+        pass
+
+
+@app.route('/button2')
+def button1():
+    socketio.emit("next", "next")
+    return redirect("/home")
 
 
 # clear the session
@@ -66,8 +96,6 @@ def home():
     if not 'users' in session:
         session['users'] = []
 
-    new_user = ''.join(random.choices(string.ascii_lowercase, k=10))
-
     page = {
         'title': "Pronatozione Aula",
         'users': session['users'],
@@ -78,7 +106,7 @@ def home():
         }, {
             "name": "Aggiungi Utente",
             "color": "green",
-            "href": "/add_user/{}".format(new_user)
+            "href": "/add_user/a"
         }, {
             "name": "Avanti",
             "color": "blue",
@@ -88,13 +116,17 @@ def home():
 
     return render_template('home.html', page=page)
 
-# home root handler
+# date root handler
 @app.route('/date')
 def date():
     if not 'users' in session:
         return redirect("/home")
     if len(session['users']) < 1:
         return redirect("/home")
+
+    days = [(dt.datetime.now() + dt.timedelta(days=i)).date()
+            for i in range(0, 7)]
+    print(days)
 
     page = {
         'title': "Pronatozione Aula",
@@ -105,19 +137,13 @@ def date():
         }, {
             "name": "Cambia giorno",
             "color": "green",
-            "href": ""
+            "href": "/button1"
         }, {
             "name": "Avanti",
             "color": "blue",
             "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
         }],
-        'days': [{"name": "lunedi", "day": "12", "month": "novembre", "active_status": "active"},
-                 {"name": "martedi", "day": "13", "month": "novembre"},
-                 {"name": "mercoledi", "day": "14", "month": "novembre"},
-                 {"name": "giovedi", "day": "15", "month": "novembre"},
-                 {"name": "venerdi", "day": "16", "month": "novembre"},
-                 {"name": "sabato", "day": "17", "month": "novembre"},
-                 {"name": "domenica", "day": "18", "month": "novembre"}]
+        'days': days
     }
 
     return render_template('date.html', page=page)

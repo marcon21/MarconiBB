@@ -22,8 +22,8 @@
             {%for user in page.users %}
             <li class='collection-item avatar user-content'>
                 <i class="large material-icons circle amber darken-1">account_circle</i>
-                <span class="title">{{ user.name }}</span>
-                <span class="title">Studente</span>
+                <span class="title">{{ user.userName + " " + user.userSurname }} </span>
+                <span class="title">{{ user.userRole }}</span>
             </li>
             {% endfor %}
         </ul>
