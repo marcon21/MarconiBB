@@ -53,7 +53,7 @@ sql = "SELECT userID, userName, userSurname, userRole FROM Utenti WHERE hashedID
 val = (hashedID,)
 
 cursor.execute(sql, val)
-result = cursor.fetchall()
+result = cursor.fetchone()
 
 # Creating the json file
 jsonDictionary = {}
