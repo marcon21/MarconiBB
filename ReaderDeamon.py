@@ -2,6 +2,7 @@ import board
 import busio
 import mysql.connector
 from hashlib import md5
+from json import dumps
 from digitalio import DigitalInOut
 from adafruit_pn532.adafruit_pn532 import MIFARE_CMD_AUTH_B
 from adafruit_pn532.i2c import PN532_I2C
@@ -52,7 +53,14 @@ sql = "SELECT userID, userName, userSurname, userRole FROM Utenti WHERE hashedID
 val = (hashedID,)
 
 cursor.execute(sql, val)
-
 result = cursor.fetchall()
 
-print(result)
+# Creating the json file
+jsonDictionary = {}
+jsonDictionary["userID"] = result[0]
+jsonDictionary["userName"] = result[1]
+jsonDictionary["userSurname"] = result[2]
+jsonDictionary["userRole"] = result[3]
+
+json = dumps(jsonDictionary)
+print(json)
