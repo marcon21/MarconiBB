@@ -63,8 +63,8 @@ mydb = mysql.connector.connect(
   database="TestBadge"
 )
 cursor = mydb.cursor()
-sql = "INSERT INTO Utenti VALUES (%s, %s, %s, %s)"
-values = (md5(userID.encode('utf-8')).hexdigest(), userName, userSurname, userRole)
+sql = "INSERT INTO Utenti VALUES (%s, %s, %s, %s, %s)"
+values = (md5(userID.encode('utf-8')).hexdigest(), userID, userName, userSurname, userRole)
 try:
     cursor.execute(sql, values)
     mydb.commit()
