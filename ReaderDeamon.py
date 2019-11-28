@@ -49,7 +49,10 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor()
 
 sql = "SELECT userID, userName, userSurname, userRole FROM Utenti WHERE hashedID = %s"
-cursor.execute(sql, hashedID)
+val = (hashedID,)
 
-result = cursor.fetchall
+cursor.execute(sql, val)
+
+result = cursor.fetchall()
+
 print(result)
