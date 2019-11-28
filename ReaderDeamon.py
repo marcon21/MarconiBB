@@ -1,5 +1,6 @@
 import board
 import busio
+import request
 import mysql.connector
 from hashlib import md5
 from json import dumps
@@ -68,5 +69,8 @@ while True:
     jsonDictionary["userRole"] = result[3]
 
     json = dumps(jsonDictionary)
-    print(json)
+    
+    response = requests.get('http://localhost:5000/post_user', data=jsonDictionary)
+    print("Json File:", json)
+    print("Response: ", response)
     sleep(1)
