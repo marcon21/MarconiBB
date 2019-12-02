@@ -70,7 +70,7 @@ while True:
     json = dumps(jsonDictionary)
 
     # Sending a POST request
-    response = requests.post('http://localhost:5000/post_user', data=jsonDictionary)
+    response = requests.post('http://localhost:5000/post_user', json=json)
 
     print("Json File:", json)
     print("Response: ", response)

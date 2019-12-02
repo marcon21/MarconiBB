@@ -8,7 +8,8 @@ import sys
 
 app = Flask(__name__)
 # crypt key fot the session
-app.secret_key = 'tatsuatshisadlmaòcisoia69420'
+#app.secret_key = 'tatsuatshisadlmaòcisoia69420'
+app.secret_key ="".join( random.choices(string.ascii_lowercase, k=15))
 socketio = SocketIO(app)
 
 # Root handler
@@ -54,6 +55,9 @@ def add_user(name):
         'userRole': random.choice(['Studente', 'Professore'])
     }
 
+    data = name
+    
+    print(session.keys(), file=sys.stderr)
     if 'users' in session:
         if data not in session['users']:
             session['users'].append(data)
@@ -66,18 +70,20 @@ def add_user(name):
 @app.route('/post_user', methods=['POST'])
 def post_user():
     if request.method == 'POST':
-        data = request.get_json()
-        print(data, file=sys.stdout)
-        if 'users' in session:
-            if data not in session['users'] or True:
+        data = request.get_json(cache=False)
+
+        #add_user(data)
+        
+        print(data, file=sys.stderr)
+        print(session.keys(), file=sys.stderr)
+        if 'users' in session.keys():
+            print("asghjdjkhgfdsdfghjhgfdsdfghjkjhgfdsdfghj", file=sys.stderr)
+            if data not in session['users']:
                 session['users'].append(data)
                 session.modified = True
         refresh_the_client()
-        return redirect('/home')
-
-    if request.method == 'GET':
-        pass
-
+        return "Nais"
+        #return redirect('/home')
 
 @app.route('/button2')
 def button1():
