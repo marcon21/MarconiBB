@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 import string
 import random
 import datetime as dt
-
+import sys
 
 app = Flask(__name__)
 # crypt key fot the session
@@ -67,11 +67,13 @@ def add_user(name):
 def post_user():
     if request.method == 'POST':
         data = request.get_json()
+        print(data, file=sys.stdout)
         if 'users' in session:
-            if data not in session['users']:
+            if data not in session['users'] or True:
                 session['users'].append(data)
                 session.modified = True
         refresh_the_client()
+        return redirect('/home')
 
     if request.method == 'GET':
         pass
@@ -95,6 +97,8 @@ def clear():
 def home():
     if not 'users' in session:
         session['users'] = []
+
+    print(session['users'])
 
     page = {
         'title': "Pronatozione Aula",
