@@ -1,16 +1,20 @@
-from flask import Flask, request, redirect, send_from_directory, render_template, g, session
+from flask import Flask, request, redirect, send_from_directory, render_template, g #, session
 import pugsql
 from flask_socketio import SocketIO
 import string
 import random
 import datetime as dt
 import sys
+import json
 
 app = Flask(__name__)
 # crypt key fot the session
 #app.secret_key = 'tatsuatshisadlmaòcisoia69420'
 app.secret_key ="".join( random.choices(string.ascii_lowercase, k=15))
 socketio = SocketIO(app)
+
+session = {}
+
 
 # Root handler
 @app.route('/')
@@ -70,7 +74,7 @@ def add_user(name):
 @app.route('/post_user', methods=['POST'])
 def post_user():
     if request.method == 'POST':
-        data = request.get_json(cache=False)
+        data = json.loads(request.get_json(cache=False))
 
         #add_user(data)
         
