@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, send_from_directory, render_template, g #, session
+from flask import Flask, request, redirect, send_from_directory, render_template, g  # , session
 import pugsql
 from flask_socketio import SocketIO
 import string
@@ -9,12 +9,25 @@ import json
 
 app = Flask(__name__)
 # crypt key fot the session
-#app.secret_key = 'tatsuatshisadlmaòcisoia69420'
-app.secret_key ="".join( random.choices(string.ascii_lowercase, k=15))
+# app.secret_key = 'tatsuatshisadlmaòcisoia69420'
+app.secret_key = "".join(random.choices(string.ascii_lowercase, k=15))
 socketio = SocketIO(app)
 
 session = {}
+current_page = None
 
+month = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+         'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
+
+dayTranslation = {
+    'Mon': 'Lunedì',
+    'Tue': 'Martedì',
+    'Wed': 'Mercoledì',
+    'Thu': 'Giovedì',
+    'Fri': 'Venerdì',
+    'Sat': 'Sabato',
+    'Sun': 'Domenica'
+}
 
 # Root handler
 @app.route('/')
@@ -59,13 +72,9 @@ def add_user(name):
         'userRole': random.choice(['Studente', 'Professore'])
     }
 
-    data = name
-    
-    print(session.keys(), file=sys.stderr)
     if 'users' in session:
         if data not in session['users']:
             session['users'].append(data)
-            session.modified = True
 
     refresh_the_client()
     return redirect('/home')
@@ -76,23 +85,33 @@ def post_user():
     if request.method == 'POST':
         data = json.loads(request.get_json(cache=False))
 
-        #add_user(data)
-        
-        print(data, file=sys.stderr)
-        print(session.keys(), file=sys.stderr)
         if 'users' in session.keys():
-            print("asghjdjkhgfdsdfghjhgfdsdfghjkjhgfdsdfghj", file=sys.stderr)
             if data not in session['users']:
                 session['users'].append(data)
-                session.modified = True
+
         refresh_the_client()
+
         return "Nais"
-        #return redirect('/home')
+
+
+@app.route('/button1')
+def button1():
+    return redirect('/clear')
+
 
 @app.route('/button2')
-def button1():
-    socketio.emit("next", "next")
-    return redirect("/home")
+def button2():
+    if current_page == 'home':
+        pass
+    elif current_page == 'date' or current_page == 'hour':
+        socketio.emit("next", "next")
+    return "Ok"
+
+
+@app.route('/button3')
+def button3():
+    socketio.emit("changePage", "changePage")
+    return "Ok"
 
 
 # clear the session
@@ -100,18 +119,18 @@ def button1():
 def clear():
     session.clear()
     refresh_the_client()
-    return redirect('/home')
+    return "Ok"
 
 # home root handler
 @app.route('/home')
 def home():
+    current_page = 'home'
+
     if not 'users' in session:
         session['users'] = []
 
-    print(session['users'])
-
     page = {
-        'title': "Pronatozione Aula",
+        'title': "Prenotozione Aula",
         'users': session['users'],
         'buttons': [{
             "name": "Annulla",
@@ -130,20 +149,35 @@ def home():
 
     return render_template('home.html', page=page)
 
+
 # date root handler
 @app.route('/date')
 def date():
+    current_page = 'date'
+
     if not 'users' in session:
         return redirect("/home")
     if len(session['users']) < 1:
         return redirect("/home")
 
-    days = [(dt.datetime.now() + dt.timedelta(days=i)).date()
-            for i in range(0, 7)]
-    print(days)
+    n_days = 7
+    week = [None for _ in range(0, n_days)]
+
+    for i in range(0, n_days):
+        day = (dt.datetime.now() + dt.timedelta(days=i)).date()
+        week[i] = {
+            'day': day.day,
+            'daySpelled': dayTranslation[day.strftime("%a")],
+            'month': month[day.month - 1]
+        }
+
+    days = []
+    for day in week:
+        if day['daySpelled'] != "Domenica":
+            days.append(day)
 
     page = {
-        'title': "Pronatozione Aula",
+        'title': "Prenotazione Aula",
         'buttons': [{
             "name": "Annulla",
             "color": "red",
@@ -151,7 +185,7 @@ def date():
         }, {
             "name": "Cambia giorno",
             "color": "green",
-            "href": "/button1"
+            "href": ""
         }, {
             "name": "Avanti",
             "color": "blue",
