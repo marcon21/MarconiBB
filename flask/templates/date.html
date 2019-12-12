@@ -51,6 +51,10 @@
         window.location.replace("/hour");
     });
 
+    socket.on('refresh', function (data) {
+        window.location.reload(1);
+    });
+
     function changeActiveStatus() {
         // console.log(document.getElementById(String(1)))
         for (let i = 1; i < n; i++) {
