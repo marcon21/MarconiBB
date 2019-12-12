@@ -96,6 +96,8 @@ def post_user():
 
 @app.route('/button1')
 def button1():
+    global current_page
+    current_page = 'home'
     session.clear()
     refresh_the_client()
     return redirect("/buttons")
@@ -120,6 +122,8 @@ def button3():
 # clear the session
 @app.route('/clear')
 def clear():
+    global current_page
+    current_page = 'home'
     session.clear()
     refresh_the_client()
     return "Ok"
