@@ -42,7 +42,8 @@
     changeActiveStatus();
 
     socket.on('next', function (data) {
-        day = day % n + 1;
+        console.log("next");
+        day = day % (n - 1) + 1;
         changeActiveStatus();
     });
 

@@ -96,22 +96,25 @@ def post_user():
 
 @app.route('/button1')
 def button1():
-    return redirect('/clear')
+    session.clear()
+    refresh_the_client()
+    return redirect("/buttons")
 
 
 @app.route('/button2')
 def button2():
+    # print(current_page, file=sys.stderr)
     if current_page == 'home':
         pass
     elif current_page == 'date' or current_page == 'hour':
         socketio.emit("next", "next")
-    return "Ok"
+    return redirect("/buttons")
 
 
 @app.route('/button3')
 def button3():
     socketio.emit("changePage", "changePage")
-    return "Ok"
+    return redirect("/buttons")
 
 
 # clear the session
@@ -124,6 +127,7 @@ def clear():
 # home root handler
 @app.route('/home')
 def home():
+    global current_page
     current_page = 'home'
 
     if not 'users' in session:
@@ -150,9 +154,36 @@ def home():
     return render_template('home.html', page=page)
 
 
+@app.route('/buttons')
+def buttons():
+    if not 'users' in session:
+        session['users'] = []
+
+    page = {
+        'title': "Prenotozione Aula",
+        'users': session['users'],
+        'buttons': [{
+            "name": "Button1",
+            "color": "red",
+            "href": "/button1"
+        }, {
+            "name": "Button2",
+            "color": "green",
+            "href": "/button2"
+        }, {
+            "name": "Button3",
+            "color": "blue",
+            "href": "/button3"
+        }]
+    }
+
+    return render_template('buttons.html', page=page)
+
+
 # date root handler
 @app.route('/date')
 def date():
+    global current_page
     current_page = 'date'
 
     if not 'users' in session:
