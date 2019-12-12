@@ -19,7 +19,7 @@ def button2Pressed(channel):
 
     if GPIO.input(BUTTON_2) == GPIO.HIGH:
         print(requests.get('http://localhost:5000/button2'))
-        sleep(1)
+        #sleep(1)
 
 def button3Pressed(channel):
     print("Tasto 3 premuto")
