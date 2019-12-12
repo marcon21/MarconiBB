@@ -16,27 +16,40 @@
 <h4 class="center">Scegli il giorno da prenotare!</h4>
 
 <div class="row">
-    <div class='col s3 m3 l3'></div>
-    <div class="col s6 m6 l6">
+    <div class='col s1 m1 l1'></div>
+    <div class="col s5 m5 l5">
         <ul class='collection'>
-            {% for day in page.days %}
-            <li id="{{ loop.index }}" class='collection-item avatar user-content'>
-                <i class="large material-icons circle amber darken-1">today</i>
-                <span class="title">{{ day.name }}</span>
-                <span class="title">{{ day.daySpelled }}</span>
-                <span class="title">{{ day.day }}</span>
-                <span class="title">{{ day.month }}</span>
+            {% for hour in page.startingHour %}
+            <li id="{{ loop.index|string + 'start' }}" class='collection-item avatar user-content'">
+                <i class=" large material-icons circle amber darken-1">today</i>
+                <span class="title">{{ hour.name }} {{ hour.startTime }}</span>
             </li>
             {% endfor %}
         </ul>
     </div>
+
+    <div class="col s5 m5 l5">
+        <ul class='collection'>
+            {% for hour in page.endingHour %}
+            <li id="{{ loop.index|string + 'end' }}" class='collection-item avatar user-content'>
+                <i class="large material-icons circle amber darken-1">today</i>
+                <span class="title">{{ hour.name }}</span>
+                <span class="title">{{ hour.startTime }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
 </div>
 
 
 <script type="text/javascript" charset="utf-8">
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    var day = 1;
+    var currentSelection = 0;
+
+    var startingHour = 0;
     var n = document.getElementsByTagName("li").length + 1;
 
     changeActiveStatus();
@@ -48,11 +61,13 @@
     });
 
     socket.on('changePage', function (data) {
-        console.log(document.getElementById(String(day)));
-        socket.emit("daySelected", {
-            dayIndex: day - 1
-        });
-        window.location.replace("/hour");
+        if (currentSelection == 0) {
+            currentSelection += 1
+        } else {
+            socket.emit("hourSelected", { 'startingHour': 1, 'endingHour': 2 })
+            window.location.replace("/type");
+        }
+
     });
 
     socket.on('refresh', function (data) {

@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, send_from_directory, render_template, g  # , session
+from flask import Flask, request, redirect, send_from_directory, render_template, g
 import pugsql
 from flask_socketio import SocketIO
 import string
@@ -119,6 +119,26 @@ def button3():
     return redirect("/buttons")
 
 
+@socketio.on("daySelected")
+def daySelected(message):
+    global session
+    i = message['dayIndex']
+    days = get_days()
+    session['daySelected'] = days[i]
+    print(session['daySelected'], file=sys.stderr)
+
+
+@socketio.on("typeSelected")
+def typeSelected(message):
+    global session
+    pass
+
+
+@socketio.on("hourSelected")
+def hourSelected(message):
+    global session
+    pass
+
 # clear the session
 @app.route('/clear')
 def clear():
@@ -127,6 +147,32 @@ def clear():
     session.clear()
     refresh_the_client()
     return "Ok"
+
+
+def get_days():
+    n_days = 7
+    week = [None for _ in range(0, n_days)]
+
+    for i in range(0, n_days):
+        day = (dt.datetime.now() + dt.timedelta(days=i)).date()
+        week[i] = {
+            'day': day.day,
+            'daySpelled': dayTranslation[day.strftime("%a")],
+            'month': month[day.month - 1]
+        }
+
+    days = []
+    for day in week:
+        if day['daySpelled'] != "Domenica":
+            days.append(day)
+
+    return days
+
+
+def get_hours():
+    hours = [{'name': '{} Ora'.format(i), 'startTime': str(
+        random.randint(0, 12))} for i in range(10)]
+    return hours
 
 # home root handler
 @app.route('/home')
@@ -158,6 +204,7 @@ def home():
     return render_template('home.html', page=page)
 
 
+# buttons page handler (for debug purposes)
 @app.route('/buttons')
 def buttons():
     if not 'users' in session:
@@ -184,7 +231,7 @@ def buttons():
     return render_template('buttons.html', page=page)
 
 
-# date root handler
+# date page handler
 @app.route('/date')
 def date():
     global current_page
@@ -195,21 +242,77 @@ def date():
     if len(session['users']) < 1:
         return redirect("/home")
 
-    n_days = 7
-    week = [None for _ in range(0, n_days)]
+    days = get_days()
 
-    for i in range(0, n_days):
-        day = (dt.datetime.now() + dt.timedelta(days=i)).date()
-        week[i] = {
-            'day': day.day,
-            'daySpelled': dayTranslation[day.strftime("%a")],
-            'month': month[day.month - 1]
-        }
+    page = {
+        'title': "Prenotazione Aula",
+        'buttons': [{
+            "name": "Annulla",
+            "color": "red",
+            "href": "/clear"
+        }, {
+            "name": "Cambia giorno",
+            "color": "green",
+            "href": ""
+        }, {
+            "name": "Avanti",
+            "color": "blue",
+            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }],
+        'days': days
+    }
 
-    days = []
-    for day in week:
-        if day['daySpelled'] != "Domenica":
-            days.append(day)
+    return render_template('date.html', page=page)
+
+
+# hour page handler
+@app.route('/hour')
+def hour():
+    global current_page
+    current_page = 'hour'
+
+    if not 'users' in session:
+        return redirect("/home")
+    if len(session['users']) < 1:
+        return redirect("/home")
+
+    hours = get_hours()
+    print(hours, file=sys.stderr)
+    page = {
+        'title': "Prenotazione Aula",
+        'buttons': [{
+            "name": "Annulla",
+            "color": "red",
+            "href": "/clear"
+        }, {
+            "name": "Cambia giorno",
+            "color": "green",
+            "href": ""
+        }, {
+            "name": "Avanti",
+            "color": "blue",
+            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }],
+        'startingHour': hours,
+        'endingHour': hours
+
+    }
+
+    return render_template('hour.html', page=page)
+
+
+# type page handler
+@app.route('/type')
+def type():
+    global current_page
+    current_page = 'type'
+
+    if not 'users' in session:
+        return redirect("/home")
+    if len(session['users']) < 1:
+        return redirect("/home")
+
+    days = get_days()
 
     page = {
         'title': "Prenotazione Aula",

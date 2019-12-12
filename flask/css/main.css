@@ -6,6 +6,7 @@
   margin: 0;
   -webkit-box-sizing: border-box;
   line-height: 50px;
+  /* outline: solid 0.25rem rgba(255, 0, 0, 0.5); */
 }
 
 h1,
