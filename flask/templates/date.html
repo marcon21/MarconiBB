@@ -20,7 +20,7 @@
     <div class="col s6 m6 l6">
         <ul class='collection'>
             {% for day in page.days %}
-            <li id="{{ loop.index }}" class='collection-item avatar user-content'>
+            <li id="{{ loop.index }}" class='collection-item avatar user-content selection'>
                 <i class="large material-icons circle amber darken-1">today</i>
                 <span class="title">{{ day.name }}</span>
                 <span class="title">{{ day.daySpelled }}</span>
@@ -63,9 +63,9 @@
         // console.log(document.getElementById(String(1)))
         for (let i = 1; i < n; i++) {
             if (i == day) {
-                document.getElementById(String(i)).classList.add('active');
+                document.getElementById(String(i)).classList.add('selection');
             } else {
-                document.getElementById(String(i)).classList.remove('active');
+                document.getElementById(String(i)).classList.remove('selection');
             }
         }
     }

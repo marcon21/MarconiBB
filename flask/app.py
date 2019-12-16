@@ -105,10 +105,10 @@ def button1():
 
 @app.route('/button2')
 def button2():
-    # print(current_page, file=sys.stderr)
+    print(current_page, file=sys.stderr)
     if current_page == 'home':
-        pass
-    elif current_page == 'date' or current_page == 'hour':
+        add = add_user(" ")
+    elif current_page == 'date' or current_page == 'hour' or current_page == 'type':
         socketio.emit("next", "next")
     return redirect("/buttons")
 
@@ -125,7 +125,7 @@ def daySelected(message):
     i = message['dayIndex']
     days = get_days()
     session['daySelected'] = days[i]
-    print(session['daySelected'], file=sys.stderr)
+    # print(session['daySelected'], file=sys.stderr)
 
 
 @socketio.on("typeSelected")
@@ -170,8 +170,8 @@ def get_days():
 
 
 def get_hours():
-    hours = [{'name': '{} Ora'.format(i), 'startTime': str(
-        random.randint(0, 12))} for i in range(10)]
+    hours = [{'name': '{} Ora'.format(i), 'startTime': str(i+7)+":00", 'endTime': str(i+7)+":55"}
+             for i in range(1, 11)]
     return hours
 
 # home root handler
@@ -189,15 +189,15 @@ def home():
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": "/clear"
+            "href": ""
         }, {
             "name": "Aggiungi Utente",
-            "color": "green",
-            "href": "/add_user/a"
+            "color": "amber darken-1",
+            "href": ""
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": "/date"
+            "href": ""
         }]
     }
 
@@ -219,7 +219,7 @@ def buttons():
             "href": "/button1"
         }, {
             "name": "Button2",
-            "color": "green",
+            "color": "amber darken-1",
             "href": "/button2"
         }, {
             "name": "Button3",
@@ -235,12 +235,13 @@ def buttons():
 @app.route('/date')
 def date():
     global current_page
-    current_page = 'date'
 
-    if not 'users' in session:
+    if not 'users' in session or len(session['users']) < 1:
         return redirect("/home")
     if len(session['users']) < 1:
         return redirect("/home")
+
+    current_page = 'date'
 
     days = get_days()
 
@@ -249,15 +250,15 @@ def date():
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": "/clear"
+            "href": ""
         }, {
             "name": "Cambia giorno",
-            "color": "green",
+            "color": "amber darken-1",
             "href": ""
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            "href": ""
         }],
         'days': days
     }
@@ -269,29 +270,30 @@ def date():
 @app.route('/hour')
 def hour():
     global current_page
-    current_page = 'hour'
 
-    if not 'users' in session:
+    if not 'users' in session or len(session['users']) < 1:
         return redirect("/home")
     if len(session['users']) < 1:
         return redirect("/home")
 
+    current_page = 'hour'
+
     hours = get_hours()
-    print(hours, file=sys.stderr)
+    # print(hours, file=sys.stderr)
     page = {
         'title': "Prenotazione Aula",
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": "/clear"
+            "href": ""
         }, {
-            "name": "Cambia giorno",
-            "color": "green",
+            "name": "Cambia ora",
+            "color": "amber darken-1",
             "href": ""
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            "href": ""
         }],
         'startingHour': hours,
         'endingHour': hours
@@ -305,34 +307,39 @@ def hour():
 @app.route('/type')
 def type():
     global current_page
-    current_page = 'type'
 
-    if not 'users' in session:
+    if not 'users' in session or len(session['users']) < 1:
         return redirect("/home")
     if len(session['users']) < 1:
         return redirect("/home")
 
-    days = get_days()
+    current_page = 'type'
+
+    days = [{
+            'name': "Aula"
+            }, {
+            'name': "Laboratorio"
+            }]
 
     page = {
         'title': "Prenotazione Aula",
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": "/clear"
+            "href": ""
         }, {
-            "name": "Cambia giorno",
-            "color": "green",
+            "name": "Cambia tipo",
+            "color": "amber darken-1",
             "href": ""
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            "href": ""
         }],
         'days': days
     }
 
-    return render_template('date.html', page=page)
+    return render_template('type.html', page=page)
 
 
 if __name__ == "__main__":

@@ -18,26 +18,47 @@
 <div class="row">
     <div class='col s1 m1 l1'></div>
     <div class="col s5 m5 l5">
-        <ul class='collection'>
-            {% for hour in page.startingHour %}
-            <li id="{{ loop.index|string + 'start' }}" class='collection-item avatar user-content'">
-                <i class=" large material-icons circle amber darken-1">today</i>
-                <span class="title">{{ hour.name }} {{ hour.startTime }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+        <table class="striped centered responsive-table">
+            <!-- <thead>
+                <tr>
+                    <th>Ora</th>
+                    <th>Inizio ora</th>
+                    <th>Fine ora</th>
+                </tr>
+            </thead> -->
+            <h4 class="center">Ora di inizio</h4>
+            <tbody>
+                {% for hour in page.startingHour %}
+                <tr id="{{ loop.index|string + 'start' }}" class="">
+                    <td>{{ hour.name }}</td>
+                    <td>{{ hour.startTime }}</td>
+                    <td>{{ hour.endTime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-    <div class="col s5 m5 l5">
-        <ul class='collection'>
-            {% for hour in page.endingHour %}
-            <li id="{{ loop.index|string + 'end' }}" class='collection-item avatar user-content'>
-                <i class="large material-icons circle amber darken-1">today</i>
-                <span class="title">{{ hour.name }}</span>
-                <span class="title">{{ hour.startTime }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+    <div class=" col s5 m5 l5">
+        <table class="striped centered responsive-table">
+            <!-- <thead>
+                <tr>
+                    <th>Ora</th>
+                    <th>Inizio ora</th>
+                    <th>Fine ora</th>
+                </tr>
+            </thead> -->
+            <h4 class="center">Ora di fine</h4>
+            <tbody>
+                {% for hour in page.endingHour %}
+                <tr id="{{ loop.index|string + 'end' }}" class="">
+                    <td>{{ hour.name }}</td>
+                    <td>{{ hour.startTime }}</td>
+                    <td>{{ hour.endTime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 
@@ -47,27 +68,32 @@
 <script type="text/javascript" charset="utf-8">
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    var currentSelection = 0;
-
-    var startingHour = 0;
-    var n = document.getElementsByTagName("li").length + 1;
-
+    var startLine = 1;
+    var currentSelection = startLine;
+    var currentTable = 0;
+    var n = 10;
     changeActiveStatus();
 
     socket.on('next', function (data) {
-        console.log("next");
-        day = day % (n - 1) + 1;
+        currentSelection = currentSelection % (n) + 1;
+        if (currentSelection < startLine) {
+            currentSelection = startLine;
+        }
         changeActiveStatus();
     });
 
     socket.on('changePage', function (data) {
-        if (currentSelection == 0) {
-            currentSelection += 1
+        if (currentTable == 0) {
+            currentTable += 1;
+            startLine = currentSelection;
+            changeActiveStatus();
         } else {
-            socket.emit("hourSelected", { 'startingHour': 1, 'endingHour': 2 })
+            socket.emit("hourSelected", {
+                'startingHour': startLine,
+                'endingHour': currentSelection
+            })
             window.location.replace("/type");
         }
-
     });
 
     socket.on('refresh', function (data) {
@@ -76,11 +102,12 @@
 
     function changeActiveStatus() {
         // console.log(document.getElementById(String(1)))
-        for (let i = 1; i < n; i++) {
-            if (i == day) {
-                document.getElementById(String(i)).classList.add('active');
+        suffix = (currentTable == 0) ? 'start' : 'end'
+        for (let i = startLine; i <= n; i++) {
+            if (currentSelection == i) {
+                document.getElementById(String(i) + suffix).classList.add('selection');
             } else {
-                document.getElementById(String(i)).classList.remove('active');
+                document.getElementById(String(i) + suffix).classList.remove('selection');
             }
         }
     }

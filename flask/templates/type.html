@@ -23,9 +23,6 @@
             <li id="{{ loop.index }}" class='collection-item avatar user-content'>
                 <i class="large material-icons circle amber darken-1">today</i>
                 <span class="title">{{ day.name }}</span>
-                <span class="title">{{ day.daySpelled }}</span>
-                <span class="title">{{ day.day }}</span>
-                <span class="title">{{ day.month }}</span>
             </li>
             {% endfor %}
         </ul>
@@ -49,10 +46,10 @@
 
     socket.on('changePage', function (data) {
         console.log(document.getElementById(String(day)));
-        socket.emit("daySelected", {
-            dayIndex: day - 1
+        socket.emit("typeSelected", {
+            type: "A"
         });
-        window.location.replace("/hour");
+        window.location.replace("/lol");
     });
 
     socket.on('refresh', function (data) {
@@ -63,9 +60,9 @@
         // console.log(document.getElementById(String(1)))
         for (let i = 1; i < n; i++) {
             if (i == day) {
-                document.getElementById(String(i)).classList.add('active');
+                document.getElementById(String(i)).classList.add('selection');
             } else {
-                document.getElementById(String(i)).classList.remove('active');
+                document.getElementById(String(i)).classList.remove('selection');
             }
         }
     }

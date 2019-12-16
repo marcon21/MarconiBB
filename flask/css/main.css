@@ -17,3 +17,16 @@ h2 {
 .user-content {
   font-size: 30px;
 }
+
+td {
+  padding: 0;
+  line-height: 6vh;
+}
+
+table.striped>tbody>tr:nth-child(odd) {
+  background-color: rgba(220, 220, 220, 0.514);
+}
+
+.selection {
+  background-color: #ffe082 !important;
+}
