@@ -30,9 +30,8 @@
             <tbody>
                 {% for hour in page.startingHour %}
                 <tr id="{{ loop.index|string + 'start' }}" class="">
-                    <td>{{ hour.name }}</td>
-                    <td>{{ hour.startTime }}</td>
-                    <td>{{ hour.endTime }}</td>
+                    <td>{{ hour.name }}
+                    <td>{{ hour.startTime }} - {{ hour.endTime }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -53,8 +52,7 @@
                 {% for hour in page.endingHour %}
                 <tr id="{{ loop.index|string + 'end' }}" class="">
                     <td>{{ hour.name }}</td>
-                    <td>{{ hour.startTime }}</td>
-                    <td>{{ hour.endTime }}</td>
+                    <td>{{ hour.startTime }} - {{ hour.endTime }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
