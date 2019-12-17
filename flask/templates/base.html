@@ -28,11 +28,10 @@
 
     <div class="center" style="position: fixed; bottom: 0; width: 100%; margin: 20px">
         {% for button in page.buttons %}
-        <a class="waves-effect waves-light btn-large {{ button.color }}" href={{ button.href }}>{{ button.name }}</a>
+        <a class="waves-effect waves-light btn-large {{ button.color }}" id="{{ button.id }}"
+            href={{ button.href }}>{{ button.name }}</a>
         {% endfor %}
     </div>
-
-
 
     <footer>{% block page_footer %}{% endblock page_footer %}</footer>
 </body>

@@ -40,6 +40,17 @@ def refresh_the_client():
     # to refresh the page
     socketio.emit("refresh", "Refresh")
 
+
+def getRoom():
+    # if False not in [el in session for el in ["a", "b"]]:
+
+    if all(el in session.keys() for el in ['users', 'selectedDay', 'startingHour', 'endingHour', 'type']):
+        # Future marconiTT Connection
+        return session['type'] + str(random.randint(1, 4)) + str(random.randint(1, 30))
+
+    return "Error"
+
+
 # 404 error handler
 @app.errorhandler(404)
 def page_not_found(e):
@@ -122,22 +133,23 @@ def button3():
 @socketio.on("daySelected")
 def daySelected(message):
     global session
-    i = message['dayIndex']
     days = get_days()
-    session['daySelected'] = days[i]
-    # print(session['daySelected'], file=sys.stderr)
-
-
-@socketio.on("typeSelected")
-def typeSelected(message):
-    global session
-    pass
+    session['selectedDay'] = days[message['dayIndex']]
 
 
 @socketio.on("hourSelected")
 def hourSelected(message):
     global session
-    pass
+    session['startingHour'] = message['startingHour']
+    session['endingHour'] = message['endingHour']
+
+
+@socketio.on("typeSelected")
+def typeSelected(message):
+    global session
+    session['type'] = message['type']
+    print(session, file=sys.stderr)
+
 
 # clear the session
 @app.route('/clear')
@@ -189,15 +201,18 @@ def home():
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": ""
+            "href": "",
+            "id": "button1"
         }, {
             "name": "Aggiungi Utente",
             "color": "amber darken-1",
-            "href": ""
+            "href": "",
+            "id": "button2"
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": ""
+            "href": "",
+            "id": "button3"
         }]
     }
 
@@ -216,15 +231,18 @@ def buttons():
         'buttons': [{
             "name": "Button1",
             "color": "red",
-            "href": "/button1"
+            "href": "/button1",
+            "id": "button1"
         }, {
             "name": "Button2",
             "color": "amber darken-1",
-            "href": "/button2"
+            "href": "/button2",
+            "id": "button2"
         }, {
             "name": "Button3",
             "color": "blue",
-            "href": "/button3"
+            "href": "/button3",
+            "id": "button3"
         }]
     }
 
@@ -250,15 +268,18 @@ def date():
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": ""
+            "href": "",
+            "id": "button1"
         }, {
             "name": "Cambia giorno",
             "color": "amber darken-1",
-            "href": ""
+            "href": "",
+            "id": "button2"
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": ""
+            "href": "",
+            "id": "button3"
         }],
         'days': days
     }
@@ -285,19 +306,20 @@ def hour():
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": ""
+            "href": "",
+            "id": "button1"
         }, {
             "name": "Cambia ora",
             "color": "amber darken-1",
-            "href": ""
+            "href": "",
+            "id": "button2"
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": ""
+            "href": "",
+            "id": "button3"
         }],
-        'startingHour': hours,
-        'endingHour': hours
-
+        'hours': hours
     }
 
     return render_template('hour.html', page=page)
@@ -315,31 +337,69 @@ def type():
 
     current_page = 'type'
 
-    days = [{
-            'name': "Aula"
-            }, {
-            'name': "Laboratorio"
-            }]
+    types = [{
+        'name': "Aula"
+    }, {
+        'name': "Laboratorio"
+    }]
 
     page = {
         'title': "Prenotazione Aula",
         'buttons': [{
             "name": "Annulla",
             "color": "red",
-            "href": ""
+            "href": "",
+            "id": "button1"
         }, {
             "name": "Cambia tipo",
             "color": "amber darken-1",
-            "href": ""
+            "href": "",
+            "id": "button2"
         }, {
             "name": "Avanti",
             "color": "blue",
-            "href": ""
+            "href": "",
+            "id": "button3"
         }],
-        'days': days
+        'types': types
     }
 
-    return render_template('type.html', page=page)
+    return render_template('type.html', page=page)  # type page handler
+
+
+@app.route('/confirmation')
+def confirmation():
+    global current_page
+
+    room = getRoom()
+    if room == "Error":
+        return redirect('/home')
+
+    current_page = 'confirmation'
+
+    page = {
+        'title': "Prenotazione Aula",
+        'buttons': [{
+            "name": "Annulla",
+            "color": "red",
+            "href": "",
+            "id": "button1"
+        }, {
+            "name": "Conferma",
+            "color": "blue",
+            "href": "",
+            "id": "button3"
+        }],
+        'roomInfo': {
+            'users': session['users'],
+            'day': session['selectedDay'],
+            'startingHour': session['startingHour'],
+            'endingHour': session['endingHour'],
+            'room': room
+        }
+    }
+
+    return render_template('confirmation.html', page=page)
 
 
 if __name__ == "__main__":

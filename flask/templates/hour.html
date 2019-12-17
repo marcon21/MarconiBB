@@ -13,19 +13,12 @@
 
 {% block page_content %}
 
-<h4 class="center">Scegli il giorno da prenotare!</h4>
-
+<h4 class="center">Scegli le ore da prenotare!</h4>
+<!-- 
 <div class="row">
     <div class='col s1 m1 l1'></div>
     <div class="col s5 m5 l5">
         <table class="striped centered responsive-table">
-            <!-- <thead>
-                <tr>
-                    <th>Ora</th>
-                    <th>Inizio ora</th>
-                    <th>Fine ora</th>
-                </tr>
-            </thead> -->
             <h4 class="center">Ora di inizio</h4>
             <tbody>
                 {% for hour in page.startingHour %}
@@ -40,13 +33,6 @@
 
     <div class=" col s5 m5 l5">
         <table class="striped centered responsive-table">
-            <!-- <thead>
-                <tr>
-                    <th>Ora</th>
-                    <th>Inizio ora</th>
-                    <th>Fine ora</th>
-                </tr>
-            </thead> -->
             <h4 class="center">Ora di fine</h4>
             <tbody>
                 {% for hour in page.endingHour %}
@@ -58,10 +44,24 @@
             </tbody>
         </table>
     </div>
+</div> -->
 
-
+<div class="row">
+    <div class='col s3 m3 l3'></div>
+    <div class="col s6 m6 l6">
+        <table class="striped centered responsive-table">
+            <h4 class="center" id="h4header">Ora di inizio</h4>
+            <tbody>
+                {% for hour in page.hours %}
+                <tr id="{{ loop.index|string }}" class="">
+                    <td>{{ hour.name }}
+                    <td>{{ hour.startTime }} - {{ hour.endTime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
 
 <script type="text/javascript" charset="utf-8">
     var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -85,6 +85,8 @@
             currentTable += 1;
             startLine = currentSelection;
             changeActiveStatus();
+            document.getElementById("button3").innerHTML = "Cambia pagina"
+            document.getElementById("h4header").innerHTML = "Ora di fine"
         } else {
             socket.emit("hourSelected", {
                 'startingHour': startLine,
@@ -99,13 +101,11 @@
     });
 
     function changeActiveStatus() {
-        // console.log(document.getElementById(String(1)))
-        suffix = (currentTable == 0) ? 'start' : 'end'
         for (let i = startLine; i <= n; i++) {
-            if (currentSelection == i) {
-                document.getElementById(String(i) + suffix).classList.add('selection');
+            if ((currentTable == 1 && currentSelection >= i) || (currentTable == 0 && currentSelection == i)) {
+                document.getElementById(String(i)).classList.add('selection');
             } else {
-                document.getElementById(String(i) + suffix).classList.remove('selection');
+                document.getElementById(String(i)).classList.remove('selection');
             }
         }
     }
