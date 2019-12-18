@@ -16,8 +16,58 @@
 <h4 class="center">Confermi la prenotazione?</h4>
 
 <div class="row">
+    <!-- 
+    <h4 class="center">Utenti: {% for user in page.roomInfo.users %} {{ user.userName + user.userSurname + ", "}}
+        {% endfor %}
+    </h4>
+    <h4 class="center">Il giorno: {{ page.roomInfo.day }}</h4>
+    <h4 class="center">Dalla ora n: {{ page.roomInfo.startingHour}}</h4>
+    <h4 class="center">Alla ora n: {{ page.roomInfo.endingHour }}</h4>
+    <h4 class="center">Aula: {{ page.roomInfo.room }}</h4> -->
+    <div class='col s3 m3 l3'></div>
+    <div class="col s6 m6 l6">
+        <ul class='collection'>
+            <!-- UTENTI -->
+            <li class='collection-item avatar user-content valign-wrapper'>
+                <i class="large material-icons circle amber darken-1">account_circle</i>
+                <h5>Utenti </h5>
+                <!-- <div class='col s1 m1 l1'></div> -->
+                <div>
+                    <ul>
+                        {% for user in page.roomInfo.users %}
+                        <li class='collection-item user-content valign-wrapper'>
+                            <span class="title">{{ user.userName }} {{ user.userSurname }}
+                                {{ user.userRole }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
-    <h4>{{ page.roomInfo }}</h4>
+                <!-- DATA -->
+            <li class='collection-item avatar user-content valign-wrapper'>
+                <i class="large material-icons circle amber darken-1">today</i>
+                <span class="title">{{ page.roomInfo.day.name }} {{ page.roomInfo.day.daySpelled }}
+                    {{ page.roomInfo.day.day }}
+                    {{ page.roomInfo.day.month }}</span>
+            </li>
+
+            <li class='collection-item avatar user-content valign-wrapper'>
+                <i class="large material-icons circle amber darken-1">access_time</i>
+                <span class="title">Dalla ora n: {{ page.roomInfo.startingHour}}</span>
+            </li>
+
+            <li class='collection-item avatar user-content valign-wrapper'>
+                <i class="large material-icons circle amber darken-1">access_time</i>
+                <span class="title">Alla ora n: {{ page.roomInfo.endingHour }}</span>
+            </li>
+
+            <li class='collection-item avatar user-content valign-wrapper'>
+                <i class="large material-icons circle amber darken-1">room</i>
+                <span class="title">Aula: {{ page.roomInfo.room }}</span>
+            </li>
+
+        </ul>
+    </div>
 </div>
 
 
