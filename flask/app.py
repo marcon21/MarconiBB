@@ -15,6 +15,7 @@ socketio = SocketIO(app)
 
 session = {}
 current_page = None
+test_mode = True
 
 month = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
          'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
@@ -45,8 +46,11 @@ def getRoom():
     # if False not in [el in session for el in ["a", "b"]]:
 
     if all(el in session.keys() for el in ['users', 'selectedDay', 'startingHour', 'endingHour', 'type']):
-        # Future marconiTT Connection
-        return session['type'] + str(random.randint(1, 4)) + str(random.randint(1, 30))
+        if test_mode:
+            return session['type'] + str(random.randint(1, 4)) + str(random.randint(1, 30))
+        else:
+            # Future marconiTT Connection
+            pass
 
     return "Error"
 
@@ -85,7 +89,27 @@ def add_user(name):
 
     if 'users' in session:
         if data not in session['users']:
-            session['users'].append(data)
+            if test_mode:
+                session['users'] = [
+                    {
+                        'userName': 'Daniel',
+                        'userSurname': 'Marcon',
+                        'userID': '1',
+                        'userRole': 'Studente'
+                    }, {
+                        'userName': 'Giacomo',
+                        'userSurname': 'Tezza',
+                        'userID': '1',
+                        'userRole': 'Studente'
+                    }, {
+                        'userName': 'Enea',
+                        'userSurname': 'Strambini',
+                        'userID': '1',
+                        'userRole': 'Studente'
+                    }
+                ]
+            else:
+                session['users'].append(data)
 
     refresh_the_client()
     return redirect('/home')
@@ -203,11 +227,6 @@ def home():
             "color": "red",
             "href": "",
             "id": "button1"
-        }, {
-            "name": "Aggiungi Utente",
-            "color": "amber darken-1",
-            "href": "",
-            "id": "button2"
         }, {
             "name": "Avanti",
             "color": "blue",
