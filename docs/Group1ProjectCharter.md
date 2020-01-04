@@ -26,7 +26,7 @@ The main purpose of the project is to give the end users the ability to book a r
 
 #### Schedule Information:
 - **10/10/2019** Basic planning of the project
-- **17/40/2019** Ordered the main hardware components
+- **17/10/2019** Ordered the main hardware components
 - **19/12/2019** First delivery of the project, basic functions are present
 - **21/05/2020** Last delivery of the project, polishing of functions and bug fixing
 
