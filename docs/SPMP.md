@@ -1,4 +1,4 @@
-# Software Project Management Plan for MarconiBB
+# Software Project Management Plan
 
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
