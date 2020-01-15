@@ -4,8 +4,7 @@ nav:
     - 'Project charter': 'ProjectCharter.md'
     - 'Software Requirements Specification Plan': 'SRS.md'
     - 'Software project management plan': 'SPMP.md'
-    - 'Business model canvas': 'business model canvas.md'
-    - 'Project model canvas': 'project model canvas.md'
+    
     
 theme:
     name: readthedocs
