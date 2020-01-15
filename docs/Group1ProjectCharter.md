@@ -1,4 +1,4 @@
-# Group 1 Project Charter for MarconiBB
+# Project Charter
 
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
