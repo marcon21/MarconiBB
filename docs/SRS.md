@@ -1,4 +1,4 @@
-# Software Requirements Specification for MarconiBB
+# Software Requirements Specification
 
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
