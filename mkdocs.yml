@@ -1,4 +1,4 @@
-site_name: 2020_5BI_Team6_Software_Documentation
+site_name: 2020_5BI_Team6
 
 nav:
     - 'Project charter': 'project charter.md'
