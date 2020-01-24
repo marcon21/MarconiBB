@@ -5,7 +5,7 @@ nav:
     - 'Software Requirements Specification Plan': 'SRS.md'
     - 'Software Project Management Plan': 'SPMP.md'
     - 'Buisness Model Canvas': 'BuisnessModelCanvas.pdf'
-    - 'Model Canvas': 'ModelCanvas.pdf'
+    - 'Project Model Canvas': 'ModelCanvas.pdf'
     
     
 theme:
