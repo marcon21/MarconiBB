@@ -36,8 +36,8 @@ The UI of MarconiBB has been created with the main objective of being user frien
 ### 4.1 Use Case
 The main scope for MarconiBB is to make easier for everyone to book a room inside the institute.
 
-* Actors: anyone with a valid badge
-* Basic Path: 
+1. Actors: anyone with a valid badge
+2. Basic Path: 
    1. The user swipes the badge in the designated area in the terminal
    2. If there are more than one user everyone have to swipe the badge, otherwise the user can select to continue
    3. The user select the day in which he wants to book a room
