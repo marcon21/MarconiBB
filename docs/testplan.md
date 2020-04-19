@@ -1,4 +1,5 @@
-# Testing Document and Plan
+# Testing Document and Plan of MarconiBB
+##### Created By: Marcon D. - Strambini E. - Tezza G.
 
 ## Introduction
 
