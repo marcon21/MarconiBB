@@ -2,7 +2,7 @@
 
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
-## Objectives:
+# Objectives:
 
 The scope of this iteration is to set down the base of the project, from the hardware requirements to the software one.
 At the end of this iteration the functionalities of the project should be:
@@ -10,11 +10,11 @@ At the end of this iteration the functionalities of the project should be:
 - Register users in the database
 - Ability for the users to book rooms
 
-## Use Cases:
+# Use Cases:
 - Register users
 - Book room
 
-## Tasks Schedule
+# Tasks Schedule
 | **Task** | **Est. Effort**  | **Act. Effort**  | **Completion Date**  | **Owner**  | **Status** |
 |----------|------------------|------------------|----------------------|------------|------------|
 | Use Case Study | 5 hr | 3 hr | 17/10/'19  | D - G  | Finished |

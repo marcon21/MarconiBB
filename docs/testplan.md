@@ -1,13 +1,11 @@
-# Testing Document and Plan of MarconiBB
+# Testing Document and Plan for MarconiBB
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
-## Introduction
+# Introduction
 
-This document outlines the test plan for MarconiBB made by ITI G. Marconi in Verona. As outlined in the project Requirements Document, this system needs to provide an efficient way to allow users to reserve class rooms in the institute ITI G. Marconi Verona. The testing activities discussed in this document will verify that the software for the reservation meets the needs of the customer by verifying that the requirements for this system, as outlined in the Requirements Document, are met.
+This document outlines the test plan for MarconiBB made by I.T.I. G. Marconi in Verona. As outlined in the project Requirements Document, this system needs to provide an efficient way to allow users to reserve class rooms in the institute I.T.I. G. Marconi. The testing activities discussed in this document will verify that the software for the reservation meets the needs of the customer by verifying that the requirements for this system, as outlined in the Requirements Document, are met.
 
----
-
-## Items Tested
+# Items Tested
 
 Items that will be tested during the testing phase as laid out by the Macro Project
 Plan will be but are not limited to:
@@ -19,9 +17,7 @@ Plan will be but are not limited to:
 - [ ] Ability to reserve a standard room.
       Test Case: 1.3
 
----
-
-## Approach
+# Approach
 
 The overall method to this testing procedure is manual system testing. Each test
 case created will have a direct link to the requirements as laid out in the
@@ -42,9 +38,7 @@ tested. Adding new features or functionality can sometimes interfere with the
 functionality of old features and to ensure product/project success, all features
 implemented should function as intended throughout the life of the software.
 
----
-
-## Item Pass/Fail Criteria
+# Item Pass/Fail Criteria
 
 The minimum requirements for this software system were laid out in the
 Requirements Document and the Macro Project Plan outlined what the creators
@@ -57,17 +51,13 @@ Features that contain major defects will fail the testing procedure and will be
 documented via an incident report and turned over to the developer for
 investigation and revision.
 
----
-
-## Test Deliverables
+# Test Deliverables
 
 In addition to the Test Plan, other test deliverables include the Test Specification
 which outlines the specific test cases and expected results of each test, and Test
 reports which is comprised of Incidents, Defects and Changes.
 
----
-
-## Testing Tasks
+# Testing Tasks
 
 The following list the testing deliverables and the activities required to produce
 the deliverable.

@@ -1,4 +1,4 @@
-# Testing Specification
+# Testing Specification for MarconiBB
 ##### Created By: Marcon D. - Strambini E. - Tezza G.
 
 ---
