@@ -6,7 +6,15 @@ nav:
     - 'Software Project Management Plan': 'SPMP.md'
     - 'Buisness Model Canvas': 'BuisnessModelCanvas.pdf'
     - 'Project Model Canvas': 'ModelCanvas.pdf'
-    
+    - 'Iteration Plan': 'IterationPlan.md'
+    - 'Architecture, Design, and Coding Standards': 'ArchitectureDesignAndCodingStandards.md'
+    - 'Memo of Understanding': 'MemoOfUnderstanding.md'
+    - 'Release Plan': 'RealesePlan.md'
+    - 'Success Criteria': 'SuccesCriteria.md'
+    - 'User Guide': 'UserGuide.md'
+    - 'System Documentation': 'systemdocumentation.md'
+    - 'Test Plan': 'testplan.md'
+    - 'Test Specification': 'testspecification.md'
     
 theme:
     name: readthedocs
